@@ -1,0 +1,97 @@
+plugins {
+    id 'fabric-loom' version '1.10-SNAPSHOT'
+    id 'maven-publish'
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+    archivesName = project.archives_base_name
+}
+
+repositories {
+    maven {
+        name 'Xander Maven'
+        url 'https://maven.isxander.dev/releases'
+    }
+    maven {
+        name "Nucleoid"
+        url "https://maven.nucleoid.xyz/"
+    }
+    maven {
+        name "sonatype-oss-snapshots1"
+        url "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+        mavenContent { snapshotsOnly() }
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${stonecutter.current.project}"
+    mappings "net.fabricmc:yarn:${property('yarn_mappings')}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${property('loader_version')}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${property('fabric_version')}"
+    include(modImplementation "net.kyori:adventure-platform-fabric:${property('adventure_version')}")
+
+    modImplementation "dev.isxander:yet-another-config-lib:${property('yacl_version')}"
+
+    compileOnly "org.projectlombok:lombok:${property('lombok_version')}"
+    annotationProcessor "org.projectlombok:lombok:${property('lombok_version')}"
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "minecraft_version", stonecutter.current.version
+    inputs.property "loader_version", project.loader_version
+    inputs.property "yacl_version", project.yacl_version
+    filteringCharset "UTF-8"
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version,
+                "minecraft_version": stonecutter.current.version,
+                "loader_version": project.loader_version,
+                "yacl_version": project.yacl_version
+    }
+}
+
+java {
+    withSourcesJar()
+    def java = stonecutter.eval(stonecutter.current.version, ">=1.20.5")
+            ? JavaVersion.VERSION_21 : JavaVersion.VERSION_17
+    targetCompatibility = java
+    sourceCompatibility = java
+}
+
+loom {
+    runConfigs.all {
+        ideConfigGenerated true
+        runDir "../../run"
+    }
+    accessWidenerPath = file("../../src/main/resources/pvptoggles.accesswidener")
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${project.archivesBaseName}" }
+    }
+}
+
+tasks.register("buildAndCollect", Copy) {
+    group = "build"
+    from(tasks.remapJar.archiveFile)
+    into(rootProject.layout.buildDirectory.file("libs/${version}-${stonecutter.current.version}"))
+    rename("(.*)(\\.[^.]+)\$", "\$1+${stonecutter.current.version}\$2")
+    dependsOn("build")
+}
+
+publishing {
+    publications {
+        create("mavenJava", MavenPublication) {
+            artifactId = project.archives_base_name
+            from components.java
+        }
+    }
+
+    repositories {
+    }
+}

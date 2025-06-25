@@ -1,0 +1,20 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.playgamesgo.pvptoggles.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "PlayerDisplayNameMixins$AdvancementFrameMixin",
+    "PlayerDisplayNameMixins$PlayerManagerMixin",
+    "PlayerEntityMixin",
+    "PlayerManagerMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}
