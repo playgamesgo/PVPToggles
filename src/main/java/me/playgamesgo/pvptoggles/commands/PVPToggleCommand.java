@@ -3,6 +3,7 @@ package me.playgamesgo.pvptoggles.commands;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import me.playgamesgo.pvptoggles.PVPToggles;
+import me.playgamesgo.pvptoggles.mixin.PlayerNameManagerAccessor;
 import me.playgamesgo.pvptoggles.mixinaccess.IPVPEntity;
 import me.playgamesgo.pvptoggles.utils.Config;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -11,6 +12,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import xyz.eclipseisoffline.eclipsescustomname.CustomName;
+import xyz.eclipseisoffline.eclipsescustomname.PlayerNameManager;
 
 public final class PVPToggleCommand {
     public static void init() {
@@ -51,10 +54,16 @@ public final class PVPToggleCommand {
             player.sendMessage(MiniMessage.miniMessage().deserialize(config.getPvpDisabledMessage()));
         }
 
-        if (Config.HANDLER.instance().isDisplayPVPStatusInPlayerName()) {
-            player.getScoreboard().addScoreHolderToTeam(player.getNameForScoreboard(),
-                    enable ? PVPToggles.getPvpEnabledTeam() : PVPToggles.getPvpDisabledTeam());
+        if (config.isAddCompatFabricCustomNames() && PVPToggles.isEclipseCustomNameLoaded) {
+            //? if >1.20.4 {
+            PlayerNameManager playerNameManager = PlayerNameManager.getPlayerNameManager(context.getSource().getServer(), CustomName.getConfig());
+            //?} else {
+            /*PlayerNameManager playerNameManager = PlayerNameManager.getPlayerNameManager(context.getSource().getServer());
+             *///?}
+            PlayerNameManagerAccessor accessor = (PlayerNameManagerAccessor) playerNameManager;
+            accessor.PVPToggles$markDirty(player);
         }
+
         return 1;
     }
 }

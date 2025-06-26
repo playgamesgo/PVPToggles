@@ -41,11 +41,12 @@ public final class Config {
 
 
     @SerialEntry
-    private boolean displayPVPStatusInPlayerName = true;
-
-    @SerialEntry
     private String pvpEnabledPlaceholder = "☠️";
 
     @SerialEntry
     private String pvpDisabledPlaceholder = "";
+
+
+    @SerialEntry
+    private boolean addCompatFabricCustomNames = true;
 }

@@ -1,16 +1,11 @@
 package me.playgamesgo.pvptoggles.mixin;
 
-import me.playgamesgo.pvptoggles.PVPToggles;
 import me.playgamesgo.pvptoggles.mixinaccess.IPVPEntity;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.scoreboard.Team;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,9 +22,6 @@ import net.minecraft.storage.WriteView;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements IPVPEntity {
-    @Shadow public abstract Scoreboard getScoreboard();
-    @Shadow protected abstract MutableText addTellClickEvent(MutableText component);
-
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -93,26 +85,5 @@ public abstract class PlayerEntityMixin extends LivingEntity implements IPVPEnti
     @Override
     public void PVPToggles$setPVPEnabled(boolean enabled) {
         this.PVPToggles$PVPEnabled = enabled;
-
-        if (me.playgamesgo.pvptoggles.utils.Config.HANDLER.instance().isDisplayPVPStatusInPlayerName()) {
-            this.getScoreboard().addScoreHolderToTeam(this.getNameForScoreboard(),
-                    enabled ? PVPToggles.getPvpEnabledTeam() : PVPToggles.getPvpDisabledTeam());
-        }
-    }
-
-    @Override
-    public Text PVPToggles$getFormatedDisplayName() {
-        if (!me.playgamesgo.pvptoggles.utils.Config.HANDLER.instance().isDisplayPVPStatusInPlayerName()) {
-            return this.getDisplayName();
-        }
-
-        Team team = this.getScoreboardTeam();
-
-        if (team != null && (team.getName().equals("pvptoggles.pvp_enabled") || team.getName().equals("pvptoggles.pvp_disabled"))) {
-            team = null;
-        }
-
-        MutableText mutableText = Team.decorateName(team, this.getName());
-        return this.addTellClickEvent(mutableText);
     }
 }
