@@ -8,10 +8,13 @@
   "contact": {},
   "license": "MIT",
   "icon": "assets/pvptoggles/icon.png",
-  "environment": "server",
+  "environment": "*",
   "entrypoints": {
     "main": [
       "me.playgamesgo.pvptoggles.PVPToggles"
+    ],
+    "client": [
+      "me.playgamesgo.pvptoggles.client.PVPTogglesClient"
     ]
   },
   "mixins": [

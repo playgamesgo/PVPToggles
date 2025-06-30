@@ -7,6 +7,7 @@ import me.playgamesgo.pvptoggles.mixin.PlayerNameManagerAccessor;
 import me.playgamesgo.pvptoggles.mixinaccess.IPVPEntity;
 import me.playgamesgo.pvptoggles.utils.Config;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.CommandManager;
@@ -47,23 +48,19 @@ public final class PVPToggleCommand {
         Config config = Config.HANDLER.instance();
         ServerPlayerEntity player = context.getSource().getPlayer();
         IPVPEntity pvp = (IPVPEntity) player;
-        pvp.PVPToggles$setPVPEnabled(enable);
-        if (enable) {
-            player.sendMessage(MiniMessage.miniMessage().deserialize(config.getPvpEnabledMessage()));
-        } else {
-            player.sendMessage(MiniMessage.miniMessage().deserialize(config.getPvpDisabledMessage()));
+
+        if (pvp.PVPToggles$isInCombat()) {
+            player.sendMessage(MiniMessage.miniMessage().deserialize(config.getCantTogglePVPInCombatMessage()));
+            return 1;
         }
 
-        if (config.isAddCompatFabricCustomNames() && PVPToggles.isEclipseCustomNameLoaded) {
-            //? if >1.20.4 {
-            PlayerNameManager playerNameManager = PlayerNameManager.getPlayerNameManager(context.getSource().getServer(), CustomName.getConfig());
-            //?} else {
-            /*PlayerNameManager playerNameManager = PlayerNameManager.getPlayerNameManager(context.getSource().getServer());
-             *///?}
-            PlayerNameManagerAccessor accessor = (PlayerNameManagerAccessor) playerNameManager;
-            accessor.PVPToggles$markDirty(player);
+        if (pvp.PVPToggles$isDisablePVPAfterDelay()) {
+            player.sendMessage(MiniMessage.miniMessage().deserialize(config.getPvpAlreadyDisablingMessage()));
+            return 1;
         }
 
+        if (enable) pvp.PVPToggles$setPVPEnabled(true);
+        else pvp.PVPToggles$setDisablePVPAfterDelay();
         return 1;
     }
 }

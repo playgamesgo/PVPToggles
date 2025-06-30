@@ -6,7 +6,8 @@
   "mixins": [
     "PlayerEntityMixin",
     "PlayerNameManagerAccessor",
-    "PlayerNameManagerMixin"
+    "PlayerNameManagerMixin",
+    "ServerPlayNetworkHandlerMixin"
   ],
   "client": [
   ],
