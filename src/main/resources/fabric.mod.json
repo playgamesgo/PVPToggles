@@ -10,11 +10,14 @@
   "icon": "assets/pvptoggles/icon.png",
   "environment": "*",
   "entrypoints": {
-    "main": [
+    "server": [
       "me.playgamesgo.pvptoggles.PVPToggles"
     ],
     "client": [
       "me.playgamesgo.pvptoggles.client.PVPTogglesClient"
+    ],
+    "modmenu": [
+      "me.playgamesgo.pvptoggles.client.config.ClientConfigGui"
     ]
   },
   "mixins": [

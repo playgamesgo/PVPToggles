@@ -23,12 +23,12 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Run chiseledBuild
-        run: ./gradlew chiseledBuild
+      - name: Run build
+        run: ./gradlew build
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: mod-jars
-          path: build/libs/**/*.jar
+          path: build/libs/*.jar
           if-no-files-found: error

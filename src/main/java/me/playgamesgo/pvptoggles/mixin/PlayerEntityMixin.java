@@ -15,15 +15,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-//? if =1.21.6 {
 import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
 import xyz.eclipseisoffline.eclipsescustomname.CustomName;
 import xyz.eclipseisoffline.eclipsescustomname.PlayerNameManager;
-//?} else {
-/*import net.minecraft.nbt.NbtCompound;
- *///?}
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements IPVPEntity {
@@ -36,6 +31,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements IPVPEnti
     @Unique private int PVPToggles$PvpDelayTimer = 0;
     @Unique private int PVPToggles$CombatTimer = 0;
     @Unique private BossBar PVPToggles$lastBossBar = null;
+    @Unique private boolean PVPToggles$hasClientMod = false;
 
     @Inject(method = "shouldDamagePlayer", at = @At("HEAD"), cancellable = true)
     private void checkPVPMode(PlayerEntity player, CallbackInfoReturnable<Boolean> cir) {
@@ -106,29 +102,15 @@ public abstract class PlayerEntityMixin extends LivingEntity implements IPVPEnti
         }
     }
 
-    //? if =1.21.6 {
     @Inject(method = "readCustomData", at = @At("HEAD"))
     private void loadPVPMode(ReadView view, CallbackInfo ci) {
         if (me.playgamesgo.pvptoggles.utils.Config.HANDLER.instance().isSaveInPlayerData()) {
             PVPToggles$setPVPEnabled(view.getBoolean("PVPTogglesPVPEnabled", me.playgamesgo.pvptoggles.utils.Config.HANDLER.instance().isDefaultPVPEnabled()));
         }
     }
-    //?} else {
-    /*@Inject(method = "readCustomDataFromNbt", at = @At("HEAD"))
-    private void loadPVPMode(NbtCompound view, CallbackInfo ci) {
-        if (me.playgamesgo.pvptoggles.utils.Config.HANDLER.instance().isSaveInPlayerData()) {
-            PVPToggles$setPVPEnabled(view.getBoolean("PVPTogglesPVPEnabled"));
-        }
-    }
-    *///?}
 
-    //? if =1.21.6 {
     @Inject(method = "writeCustomData", at = @At("HEAD"))
     private void writePVPMode(WriteView view, CallbackInfo ci) {
-        //?} else {
-    /*@Inject(method = "writeCustomDataToNbt", at = @At("HEAD"))
-    private void writePVPMode(NbtCompound view, CallbackInfo ci) {
-        *///?}
         if (me.playgamesgo.pvptoggles.utils.Config.HANDLER.instance().isSaveInPlayerData()) {
             view.putBoolean("PVPTogglesPVPEnabled", PVPToggles$PVPEnabled);
         }
@@ -150,11 +132,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements IPVPEnti
 
 
             if (config.isAddCompatFabricCustomNames() && PVPToggles.isEclipseCustomNameLoaded) {
-                //? if >1.20.4 {
                 PlayerNameManager playerNameManager = PlayerNameManager.getPlayerNameManager(getServer(), CustomName.getConfig());
-                //?} else {
-                /*PlayerNameManager playerNameManager = PlayerNameManager.getPlayerNameManager(getServer());
-                 *///?}
                 PlayerNameManagerAccessor accessor = (PlayerNameManagerAccessor) playerNameManager;
 
                 PlayerEntity player = (PlayerEntity) (Object) this;
@@ -198,5 +176,15 @@ public abstract class PlayerEntityMixin extends LivingEntity implements IPVPEnti
     @Override
     public boolean PVPToggles$isInCombat() {
         return this.PVPToggles$CombatTimer > 0;
+    }
+
+    @Override
+    public boolean PVPToggles$hasClientMod() {
+        return this.PVPToggles$hasClientMod;
+    }
+
+    @Override
+    public void PVPToggles$setHasClientMod(boolean hasClientMod) {
+        this.PVPToggles$hasClientMod = hasClientMod;
     }
 }

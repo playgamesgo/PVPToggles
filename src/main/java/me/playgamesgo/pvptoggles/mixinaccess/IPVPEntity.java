@@ -9,4 +9,7 @@ public interface IPVPEntity {
 
     void PVPToggles$startCombat();
     boolean PVPToggles$isInCombat();
+
+    boolean PVPToggles$hasClientMod();
+    void PVPToggles$setHasClientMod(boolean hasClientMod);
 }

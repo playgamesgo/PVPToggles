@@ -84,4 +84,8 @@ public final class Config {
 
     @SerialEntry
     private String pvpDisabledPlaceholder = "";
+
+
+    @SerialEntry
+    private boolean allowClientHealthTracker = true;
 }
