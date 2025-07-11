@@ -10,7 +10,8 @@
     "ServerPlayNetworkHandlerMixin"
   ],
   "client": [
-    "client.ClientPlayNetworkHandlerMixin"
+    "client.ClientPlayNetworkHandlerMixin",
+    "client.GameMenuScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,7 +1,10 @@
 package me.playgamesgo.pvptoggles.mixin;
 
 import me.playgamesgo.pvptoggles.PVPToggles;
+import me.playgamesgo.pvptoggles.events.CombatCallback;
 import me.playgamesgo.pvptoggles.mixinaccess.IPVPEntity;
+import me.playgamesgo.pvptoggles.packets.CombatPacket;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -98,6 +101,10 @@ public abstract class PlayerEntityMixin extends LivingEntity implements IPVPEnti
                     audience.hideBossBar(PVPToggles$lastBossBar);
                 }
                 PVPToggles$lastBossBar = null;
+                CombatCallback.EVENT.invoker().onCombatChange((PlayerEntity) (Object) this, false);
+
+                PlayerEntity player = (PlayerEntity) (Object) this;
+                if (player instanceof ServerPlayerEntity serverPlayer) ServerPlayNetworking.send(serverPlayer, new CombatPacket(false));
             }
         }
     }
@@ -153,6 +160,10 @@ public abstract class PlayerEntityMixin extends LivingEntity implements IPVPEnti
             }
             PVPToggles$DisablePVPAfterDelay = false;
         }
+        CombatCallback.EVENT.invoker().onCombatChange((PlayerEntity) (Object) this, true);
+
+        PlayerEntity player = (PlayerEntity) (Object) this;
+        if (player instanceof ServerPlayerEntity serverPlayer) ServerPlayNetworking.send(serverPlayer, new CombatPacket(true));
     }
 
     @Override

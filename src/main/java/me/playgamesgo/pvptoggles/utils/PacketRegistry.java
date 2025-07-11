@@ -1,5 +1,6 @@
 package me.playgamesgo.pvptoggles.utils;
 
+import me.playgamesgo.pvptoggles.packets.CombatPacket;
 import me.playgamesgo.pvptoggles.packets.ICustomPacket;
 import me.playgamesgo.pvptoggles.packets.PVPHandshakePacket;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -17,7 +18,8 @@ public final class PacketRegistry {
     );
 
     private static final List<Class<? extends ICustomPacket<? extends CustomPayload>>> serverPackets = List.of(
-            PVPHandshakePacket.class
+            PVPHandshakePacket.class,
+            CombatPacket.class
     );
 
     public static void registerPackets() {
