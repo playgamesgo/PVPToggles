@@ -1,6 +1,7 @@
 package me.playgamesgo.pvptoggles.mixin.client;
 
 import me.playgamesgo.pvptoggles.client.PVPTogglesClient;
+import me.playgamesgo.pvptoggles.client.config.ClientConfig;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import org.jetbrains.annotations.Nullable;
@@ -16,6 +17,8 @@ public class GameMenuScreenMixin {
 
     @Inject(method = "render", at = @At("TAIL"))
     private void render(CallbackInfo ci) {
-        if (exitButton != null) exitButton.active = !PVPTogglesClient.isInCombat;
+        boolean render = !PVPTogglesClient.isInCombat;
+        if (!ClientConfig.HANDLER.instance().isDisableExitButton()) render = true;
+        if (exitButton != null) exitButton.active = render;
     }
 }

@@ -8,12 +8,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.ArrayList;
-
 @Mixin(ClientPlayNetworkHandler.class)
 public class ClientPlayNetworkHandlerMixin {
     @Inject(method = "onGameJoin", at = @At("TAIL"))
     private void onGameJoin(CallbackInfo info) {
-        ClientPlayNetworking.send(new PVPHandshakePacket(new ArrayList<>()));
+        ClientPlayNetworking.send(new PVPHandshakePacket());
     }
 }

@@ -18,7 +18,6 @@ public final class PacketRegistry {
     );
 
     private static final List<Class<? extends ICustomPacket<? extends CustomPayload>>> serverPackets = List.of(
-            PVPHandshakePacket.class,
             CombatPacket.class
     );
 

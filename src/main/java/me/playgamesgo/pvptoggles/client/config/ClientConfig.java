@@ -28,7 +28,4 @@ public final class ClientConfig {
 
     @SerialEntry
     private boolean replaceCombatBar = true;
-
-    @SerialEntry
-    private boolean enableHealthTracker = true;
 }
