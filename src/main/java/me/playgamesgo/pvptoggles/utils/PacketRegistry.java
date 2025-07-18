@@ -3,6 +3,7 @@ package me.playgamesgo.pvptoggles.utils;
 import me.playgamesgo.pvptoggles.packets.CombatPacket;
 import me.playgamesgo.pvptoggles.packets.ICustomPacket;
 import me.playgamesgo.pvptoggles.packets.PVPHandshakePacket;
+import me.playgamesgo.pvptoggles.packets.TogglePVP;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -14,11 +15,13 @@ import java.util.List;
 
 public final class PacketRegistry {
     private static final List<Class<? extends ICustomPacket<? extends CustomPayload>>> clientPackets = List.of(
-            PVPHandshakePacket.class
+            PVPHandshakePacket.class,
+            TogglePVP.class
     );
 
     private static final List<Class<? extends ICustomPacket<? extends CustomPayload>>> serverPackets = List.of(
-            CombatPacket.class
+            CombatPacket.class,
+            TogglePVP.class
     );
 
     public static void registerPackets() {

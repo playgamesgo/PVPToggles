@@ -4,6 +4,7 @@ import me.playgamesgo.pvptoggles.PVPToggles;
 import me.playgamesgo.pvptoggles.events.CombatCallback;
 import me.playgamesgo.pvptoggles.mixinaccess.IPVPEntity;
 import me.playgamesgo.pvptoggles.packets.CombatPacket;
+import me.playgamesgo.pvptoggles.packets.TogglePVP;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
@@ -145,6 +146,10 @@ public abstract class PlayerEntityMixin extends LivingEntity implements IPVPEnti
                 PlayerEntity player = (PlayerEntity) (Object) this;
                 if (player instanceof ServerPlayerEntity serverPlayer) accessor.PVPToggles$markDirty(serverPlayer);
             }
+        }
+
+        if (PVPToggles$hasClientMod) {
+            ServerPlayNetworking.send((ServerPlayerEntity) (Object) this, new TogglePVP(PVPToggles$PVPEnabled));
         }
     }
 

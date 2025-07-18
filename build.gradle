@@ -28,6 +28,10 @@ repositories {
         url "https://maven.terraformersmc.com/"
     }
     maven {
+        name "Wisp Forest"
+        url 'https://maven.wispforest.io/releases/'
+    }
+    maven {
         name "sonatype-oss-snapshots1"
         url "https://s01.oss.sonatype.org/content/repositories/snapshots/"
         mavenContent { snapshotsOnly() }
@@ -55,6 +59,7 @@ dependencies {
     modImplementation "dev.isxander:yet-another-config-lib:${property('yacl_version')}"
     modImplementation "com.terraformersmc:modmenu:${property('modmenu_version')}"
     include(modImplementation "eu.pb4:placeholder-api:${property('placeholder_api_version')}")
+    modImplementation "io.wispforest:owo-lib:${property('owo_version')}"
 
     modImplementation "maven.modrinth:fabric-custom-names:${property('fabric_custom_names_version')}"
     modImplementation "me.lucko:fabric-permissions-api:${property('fabric_permissions_api_version')}"
@@ -76,6 +81,11 @@ processResources {
                 "loader_version": project.loader_version,
                 "yacl_version": project.yacl_version
     }
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs.add("-parameters")
+    options.compilerArgs.add("--enable-preview")
 }
 
 java {
