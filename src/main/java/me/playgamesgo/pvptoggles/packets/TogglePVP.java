@@ -1,11 +1,11 @@
 package me.playgamesgo.pvptoggles.packets;
 
+import me.playgamesgo.pvptoggles.client.PVPTogglesClient;
 import me.playgamesgo.pvptoggles.mixinaccess.IPVPEntity;
 import me.playgamesgo.pvptoggles.utils.Config;
 import me.playgamesgo.pvptoggles.utils.PVPTogglesConstants;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -31,7 +31,7 @@ public record TogglePVP(boolean enable) implements CustomPayload, ICustomPacket<
 
     @Override
     public void handleClient(TogglePVP payload, ClientPlayNetworking.Context context) {
-        context.client().player.sendMessage(Component.text(payload.enable));
+        PVPTogglesClient.isPVPEnabled = payload.enable;
     }
 
     @Override

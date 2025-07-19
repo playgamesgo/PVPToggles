@@ -12,6 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ClientPlayNetworkHandlerMixin {
     @Inject(method = "onGameJoin", at = @At("TAIL"))
     private void onGameJoin(CallbackInfo info) {
-        ClientPlayNetworking.send(new PVPHandshakePacket());
+        ClientPlayNetworking.send(new PVPHandshakePacket(false));
     }
 }
