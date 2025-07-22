@@ -1,10 +1,10 @@
 package me.playgamesgo.pvptoggles.mixin;
 
-import me.playgamesgo.pvptoggles.PVPToggles;
 import me.playgamesgo.pvptoggles.events.CombatCallback;
 import me.playgamesgo.pvptoggles.mixinaccess.IPVPEntity;
 import me.playgamesgo.pvptoggles.packets.CombatPacket;
 import me.playgamesgo.pvptoggles.packets.TogglePVP;
+import me.playgamesgo.pvptoggles.utils.CompatUtil;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
@@ -21,8 +21,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
-import xyz.eclipseisoffline.eclipsescustomname.CustomName;
-import xyz.eclipseisoffline.eclipsescustomname.PlayerNameManager;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements IPVPEntity {
@@ -138,14 +136,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements IPVPEnti
             if (enabled) audience.sendMessage(MiniMessage.miniMessage().deserialize(config.getPvpEnabledMessage()));
             else audience.sendMessage(MiniMessage.miniMessage().deserialize(config.getPvpDisabledMessage()));
 
-
-            if (config.isAddCompatFabricCustomNames() && PVPToggles.isEclipseCustomNameLoaded) {
-                PlayerNameManager playerNameManager = PlayerNameManager.getPlayerNameManager(getServer(), CustomName.getConfig());
-                PlayerNameManagerAccessor accessor = (PlayerNameManagerAccessor) playerNameManager;
-
-                PlayerEntity player = (PlayerEntity) (Object) this;
-                if (player instanceof ServerPlayerEntity serverPlayer) accessor.PVPToggles$markDirty(serverPlayer);
-            }
+            PlayerEntity player = (PlayerEntity) (Object) this;
+            CompatUtil.fabricCustomNamesCompat(player);
         }
 
         if (PVPToggles$hasClientMod) {

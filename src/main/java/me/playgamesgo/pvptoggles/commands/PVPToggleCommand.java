@@ -2,19 +2,14 @@ package me.playgamesgo.pvptoggles.commands;
 
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import me.playgamesgo.pvptoggles.PVPToggles;
-import me.playgamesgo.pvptoggles.mixin.PlayerNameManagerAccessor;
 import me.playgamesgo.pvptoggles.mixinaccess.IPVPEntity;
 import me.playgamesgo.pvptoggles.utils.Config;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import xyz.eclipseisoffline.eclipsescustomname.CustomName;
-import xyz.eclipseisoffline.eclipsescustomname.PlayerNameManager;
 
 public final class PVPToggleCommand {
     public static void init() {

@@ -2,6 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "me.playgamesgo.pvptoggles.mixin",
+  "plugin": "me.playgamesgo.pvptoggles.PVPTogglesMixinConfig",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "PlayerEntityMixin",

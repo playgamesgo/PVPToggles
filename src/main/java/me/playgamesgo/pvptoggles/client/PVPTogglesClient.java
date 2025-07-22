@@ -1,7 +1,7 @@
 package me.playgamesgo.pvptoggles.client;
 
 import me.playgamesgo.pvptoggles.client.config.ClientConfig;
-import me.playgamesgo.pvptoggles.client.gui.PVPIndicator;
+import me.playgamesgo.pvptoggles.client.gui.HudRenderer;
 import me.playgamesgo.pvptoggles.client.utils.Keybinds;
 import me.playgamesgo.pvptoggles.utils.PacketRegistry;
 import net.fabricmc.api.ClientModInitializer;
@@ -16,6 +16,6 @@ public final class PVPTogglesClient implements ClientModInitializer {
         PacketRegistry.registerPackets();
         PacketRegistry.registerS2CPacketListeners();
         Keybinds.init();
-        PVPIndicator.init();
+        HudRenderer.init();
     }
 }

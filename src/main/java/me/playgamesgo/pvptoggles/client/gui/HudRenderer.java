@@ -10,12 +10,12 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.render.RenderTickCounter;
 
-public final class PVPIndicator {
+public final class HudRenderer {
     public static void init() {
-        HudElementRegistry.attachElementBefore(VanillaHudElements.MISC_OVERLAYS, PVPTogglesConstants.PVP_INDICATOR_ID, PVPIndicator::render);
+        HudElementRegistry.attachElementBefore(VanillaHudElements.MISC_OVERLAYS, PVPTogglesConstants.PVP_INDICATOR_ID, HudRenderer::renderIndicator);
     }
 
-    private static void render(DrawContext context, RenderTickCounter tickCounter) {
+    private static void renderIndicator(DrawContext context, RenderTickCounter tickCounter) {
         if (!ClientConfig.HANDLER.instance().isDisplayPVPIcon()) return;
         if (!PVPTogglesClient.isPVPEnabled) return;
         context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, InGameHud.HOTBAR_ATTACK_INDICATOR_PROGRESS_TEXTURE, 0, context.getScaledWindowHeight() - 18, 18, 18);
