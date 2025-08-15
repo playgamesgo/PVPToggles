@@ -59,9 +59,8 @@ dependencies {
     modImplementation "dev.isxander:yet-another-config-lib:${property('yacl_version')}"
     modImplementation "com.terraformersmc:modmenu:${property('modmenu_version')}"
     include(modImplementation "eu.pb4:placeholder-api:${property('placeholder_api_version')}")
-    modImplementation "io.wispforest:owo-lib:${property('owo_version')}"
 
-    modImplementation "maven.modrinth:fabric-custom-names:${property('fabric_custom_names_version')}"
+    modCompileOnly "maven.modrinth:fabric-custom-names:${property('fabric_custom_names_version')}"
     modImplementation "me.lucko:fabric-permissions-api:${property('fabric_permissions_api_version')}"
 
     compileOnly "org.projectlombok:lombok:${property('lombok_version')}"

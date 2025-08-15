@@ -36,12 +36,15 @@ public abstract class PlayerEntityMixin extends LivingEntity implements IPVPEnti
     @Unique private boolean PVPToggles$hasClientMod = false;
 
     @Inject(method = "shouldDamagePlayer", at = @At("HEAD"), cancellable = true)
-    private void checkPVPMode(PlayerEntity player, CallbackInfoReturnable<Boolean> cir) {
+    private void checkPVPMode(PlayerEntity attacker, CallbackInfoReturnable<Boolean> cir) {
         me.playgamesgo.pvptoggles.utils.Config config = me.playgamesgo.pvptoggles.utils.Config.HANDLER.instance();
-        IPVPEntity pvp = (IPVPEntity) player;
-        if (!pvp.PVPToggles$isPVPEnabled()) {
+        PlayerEntity thisEntity = (PlayerEntity) (Object) this;
+        if (attacker.equals(thisEntity)) return;
+
+        IPVPEntity attackerPVP = (IPVPEntity) attacker;
+        if (!attackerPVP.PVPToggles$isPVPEnabled()) {
             cir.setReturnValue(false);
-            if (player instanceof Audience audience) {
+            if (attackerPVP instanceof Audience audience) {
                 audience.sendActionBar(MiniMessage.miniMessage().deserialize(config.getPvpDisabledSelfMessage()));
             }
             return;
@@ -49,7 +52,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements IPVPEnti
 
         if (!PVPToggles$PVPEnabled) {
             cir.setReturnValue(false);
-            if (player instanceof Audience audience) {
+            if (attackerPVP instanceof Audience audience) {
                 audience.sendActionBar(MiniMessage.miniMessage().deserialize(config.getPvpDisabledOtherMessage()));
             }
             return;
@@ -57,7 +60,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements IPVPEnti
 
         if (config.isEnableCombatManager()) {
             PVPToggles$startCombat();
-            pvp.PVPToggles$startCombat();
+            attackerPVP.PVPToggles$startCombat();
         }
     }
 
