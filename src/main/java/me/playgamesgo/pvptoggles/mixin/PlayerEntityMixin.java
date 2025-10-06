@@ -106,7 +106,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements IPVPEnti
                 CombatCallback.EVENT.invoker().onCombatChange((PlayerEntity) (Object) this, false);
 
                 PlayerEntity player = (PlayerEntity) (Object) this;
-                if (player instanceof ServerPlayerEntity serverPlayer) ServerPlayNetworking.send(serverPlayer, new CombatPacket(false));
+                if (player instanceof ServerPlayerEntity serverPlayer)
+                    ServerPlayNetworking.send(serverPlayer, new CombatPacket(false));
             }
         }
     }
@@ -163,7 +164,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements IPVPEnti
         CombatCallback.EVENT.invoker().onCombatChange((PlayerEntity) (Object) this, true);
 
         PlayerEntity player = (PlayerEntity) (Object) this;
-        if (player instanceof ServerPlayerEntity serverPlayer) ServerPlayNetworking.send(serverPlayer, new CombatPacket(true));
+        if (player instanceof ServerPlayerEntity serverPlayer)
+            ServerPlayNetworking.send(serverPlayer, new CombatPacket(true));
     }
 
     @Override
@@ -185,8 +187,33 @@ public abstract class PlayerEntityMixin extends LivingEntity implements IPVPEnti
     }
 
     @Override
+    public void PVPToggles$setDisablePVPAfterDelay(boolean enabled) {
+        this.PVPToggles$DisablePVPAfterDelay = enabled;
+    }
+
+    @Override
+    public void PVPToggles$setPVPDelayTimer(int ticks) {
+        this.PVPToggles$PvpDelayTimer = ticks;
+    }
+
+    @Override
+    public int PVPToggles$getPvpDelayTimer() {
+        return this.PVPToggles$PvpDelayTimer;
+    }
+
+    @Override
     public boolean PVPToggles$isInCombat() {
         return this.PVPToggles$CombatTimer > 0;
+    }
+
+    @Override
+    public void PVPToggles$resetCombatTimer() {
+        this.PVPToggles$CombatTimer = 0;
+        CombatCallback.EVENT.invoker().onCombatChange((PlayerEntity) (Object) this, false);
+        if (this instanceof Audience audience && me.playgamesgo.pvptoggles.utils.Config.HANDLER.instance().isCombatManagerShowBossBar()) {
+            if (PVPToggles$lastBossBar != null) audience.hideBossBar(PVPToggles$lastBossBar);
+            PVPToggles$lastBossBar = null;
+        }
     }
 
     @Override
