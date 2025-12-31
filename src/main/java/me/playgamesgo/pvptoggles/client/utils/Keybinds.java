@@ -4,14 +4,16 @@ import me.playgamesgo.pvptoggles.packets.TogglePVP;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
 public final class Keybinds {
     public static final KeybindWrapper togglePVP = (KeybindWrapper) KeyBindingHelper.registerKeyBinding(new KeybindWrapper(
             "key.pvptoggles.toggle_pvp",
             InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_H,
-            "key.categories.pvptoggles"
+            KeyBinding.Category.create(Identifier.of("pvptoggles", "pvptoggles"))
     ));
 
     public static void init() {

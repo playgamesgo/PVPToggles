@@ -12,7 +12,7 @@ public final class CompatUtil {
         Config config = Config.HANDLER.instance();
 
         if (config.isAddCompatFabricCustomNames() && PVPToggles.isEclipseCustomNameLoaded) {
-            PlayerNameManager playerNameManager = PlayerNameManager.getPlayerNameManager(player.getServer(), CustomName.getConfig());
+            PlayerNameManager playerNameManager = PlayerNameManager.getPlayerNameManager(player.getEntityWorld().getServer(), CustomName.getConfig());
             PlayerNameManagerAccessor accessor = (PlayerNameManagerAccessor) playerNameManager;
 
 

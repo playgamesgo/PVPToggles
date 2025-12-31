@@ -6,12 +6,12 @@ import net.minecraft.client.util.InputUtil;
 public final class KeybindWrapper extends KeyBinding {
     private boolean wasPressed;
 
-    public KeybindWrapper(String translationKey, int code, String category) {
+    public KeybindWrapper(String translationKey, int code, Category category) {
         super(translationKey, code, category);
         wasPressed = false;
     }
 
-    public KeybindWrapper(String translationKey, InputUtil.Type type, int code, String category) {
+    public KeybindWrapper(String translationKey, InputUtil.Type type, int code, Category category) {
         super(translationKey, type, code, category);
         this.wasPressed = false;
     }

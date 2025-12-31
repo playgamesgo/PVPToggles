@@ -21,7 +21,7 @@ public class ServerPlayNetworkHandlerMixin {
 
         IPVPEntity pvp = (IPVPEntity) player;
         if (pvp.PVPToggles$isInCombat()) {
-            player.kill(player.getWorld());
+            player.kill(player.getEntityWorld());
         }
     }
 }
