@@ -32,6 +32,10 @@ repositories {
         url 'https://maven.wispforest.io/releases/'
     }
     maven {
+        url "https://repo.panda-lang.org/releases"
+        name "Panda"
+    }
+    maven {
         name "sonatype-oss-snapshots1"
         url "https://s01.oss.sonatype.org/content/repositories/snapshots/"
         mavenContent { snapshotsOnly() }
@@ -56,6 +60,7 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${property('fabric_version')}"
     include(modImplementation "net.kyori:adventure-platform-fabric:${property('adventure_version')}")
 
+    modImplementation include("dev.rollczi:litecommands-fabric:${property('litecommands_version')}")
     modImplementation "dev.isxander:yet-another-config-lib:${property('yacl_version')}"
     modImplementation "com.terraformersmc:modmenu:${property('modmenu_version')}"
     include(modImplementation "eu.pb4:placeholder-api:${property('placeholder_api_version')}")

@@ -88,4 +88,14 @@ public final class Config {
 
     @SerialEntry
     private boolean allowClientHealthTracker = true;
+
+
+    @SerialEntry
+    private String configReloadedMessage = "<green><bold>PVPToggles config reloaded!</bold></green>";
+
+    @SerialEntry
+    private String adminSetPVPEnabledMessage = "<green><bold>Set PVP enabled for {player}!</bold></green>";
+
+    @SerialEntry
+    private String adminSetPVPDisabledMessage = "<green><bold>Set PVP disabled for {player}!</bold></green>";
 }
