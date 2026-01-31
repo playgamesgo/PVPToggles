@@ -7,6 +7,7 @@ import me.playgamesgo.pvptoggles.PVPToggles;
 import me.playgamesgo.pvptoggles.mixinaccess.IPVPEntity;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public final class PlaceholdersUtil {
@@ -23,12 +24,12 @@ public final class PlaceholdersUtil {
         IPVPEntity pvpEntity = (IPVPEntity) player;
 
         if (raw) {
-            PlaceholderResult.value(pvpEntity.PVPToggles$isPVPEnabled()
-                    ? PVPToggles.getAdventure().asNative(MiniMessage.miniMessage().deserialize(config.getPvpEnabledPlaceholder()))
-                    : PVPToggles.getAdventure().asNative(MiniMessage.miniMessage().deserialize(config.getPvpDisabledPlaceholder())));
+            return PlaceholderResult.value(pvpEntity.PVPToggles$isPVPEnabled()
+                    ? Text.literal(config.getPvpEnabledPlaceholder())
+                    : Text.literal(config.getPvpDisabledPlaceholder()));
         }
         return PlaceholderResult.value(pvpEntity.PVPToggles$isPVPEnabled()
-                ? config.getPvpEnabledPlaceholder()
-                : config.getPvpDisabledPlaceholder());
+                ? PVPToggles.getAdventure().asNative(MiniMessage.miniMessage().deserialize(config.getPvpEnabledPlaceholder()))
+                : PVPToggles.getAdventure().asNative(MiniMessage.miniMessage().deserialize(config.getPvpDisabledPlaceholder())));
     }
 }
