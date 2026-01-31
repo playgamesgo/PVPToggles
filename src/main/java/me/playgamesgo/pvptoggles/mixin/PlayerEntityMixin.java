@@ -79,7 +79,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements IPVPEnti
                     }
                 } else {
                     PVPToggles$DisablePVPAfterDelay = false;
-                    PVPToggles$setPVPEnabled(false);
+                    PVPToggles$setPVPEnabled(false, false);
                 }
             }
         }
@@ -115,7 +115,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements IPVPEnti
     @Inject(method = "readCustomData", at = @At("HEAD"))
     private void loadPVPMode(ReadView view, CallbackInfo ci) {
         if (me.playgamesgo.pvptoggles.utils.Config.HANDLER.instance().isSaveInPlayerData()) {
-            PVPToggles$setPVPEnabled(view.getBoolean("PVPTogglesPVPEnabled", me.playgamesgo.pvptoggles.utils.Config.HANDLER.instance().isDefaultPVPEnabled()));
+            PVPToggles$setPVPEnabled(view.getBoolean("PVPTogglesPVPEnabled", me.playgamesgo.pvptoggles.utils.Config.HANDLER.instance().isDefaultPVPEnabled()), true);
         }
     }
 
@@ -132,17 +132,17 @@ public abstract class PlayerEntityMixin extends LivingEntity implements IPVPEnti
     }
 
     @Override
-    public void PVPToggles$setPVPEnabled(boolean enabled) {
+    public void PVPToggles$setPVPEnabled(boolean enabled, boolean silent) {
         this.PVPToggles$PVPEnabled = enabled;
 
         me.playgamesgo.pvptoggles.utils.Config config = me.playgamesgo.pvptoggles.utils.Config.HANDLER.instance();
-        if (this instanceof Audience audience) {
+        if (!silent && this instanceof Audience audience) {
             if (enabled) audience.sendMessage(MiniMessage.miniMessage().deserialize(config.getPvpEnabledMessage()));
             else audience.sendMessage(MiniMessage.miniMessage().deserialize(config.getPvpDisabledMessage()));
-
-            PlayerEntity player = (PlayerEntity) (Object) this;
-            CompatUtil.fabricCustomNamesCompat(player);
         }
+
+        PlayerEntity player = (PlayerEntity) (Object) this;
+        CompatUtil.fabricCustomNamesCompat(player);
 
         if (PVPToggles$hasClientMod) {
             ServerPlayNetworking.send((ServerPlayerEntity) (Object) this, new TogglePVP(PVPToggles$PVPEnabled));

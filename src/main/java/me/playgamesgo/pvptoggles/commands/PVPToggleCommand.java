@@ -35,7 +35,7 @@ public final class PVPToggleCommand {
             return;
         }
 
-        if (enable) pvp.PVPToggles$setPVPEnabled(true);
+        if (enable) pvp.PVPToggles$setPVPEnabled(true, false);
         else pvp.PVPToggles$setDisablePVPAfterDelay();
     }
 }

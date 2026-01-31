@@ -2,7 +2,7 @@ package me.playgamesgo.pvptoggles.mixinaccess;
 
 public interface IPVPEntity {
     boolean PVPToggles$isPVPEnabled();
-    void PVPToggles$setPVPEnabled(boolean enabled);
+    void PVPToggles$setPVPEnabled(boolean enabled, boolean silent);
 
     boolean PVPToggles$isDisablePVPAfterDelay();
     void PVPToggles$setDisablePVPAfterDelay();

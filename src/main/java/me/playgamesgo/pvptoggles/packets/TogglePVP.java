@@ -50,7 +50,7 @@ public record TogglePVP(boolean enable) implements CustomPayload, ICustomPacket<
             return;
         }
 
-        if (!pvp.PVPToggles$isPVPEnabled()) pvp.PVPToggles$setPVPEnabled(true);
+        if (!pvp.PVPToggles$isPVPEnabled()) pvp.PVPToggles$setPVPEnabled(true, false);
         else pvp.PVPToggles$setDisablePVPAfterDelay();
     }
 }

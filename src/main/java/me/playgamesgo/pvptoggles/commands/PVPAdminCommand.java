@@ -24,7 +24,7 @@ public final class PVPAdminCommand {
     @Execute(name = "set")
     public void set(@Context ServerCommandSource source, @Arg PlayerEntity player, @Arg boolean enable) {
         IPVPEntity pvp = (IPVPEntity) player;
-        pvp.PVPToggles$setPVPEnabled(enable);
+        pvp.PVPToggles$setPVPEnabled(enable, false);
 
         Config config = Config.HANDLER.instance();
         String message = enable ? config.getAdminSetPVPEnabledMessage() : config.getAdminSetPVPDisabledMessage();

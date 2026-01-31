@@ -19,7 +19,7 @@ public class ServerPlayerEntityMixin {
     @Inject(method = "copyFrom", at = @At("TAIL"))
     private void copyFrom(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfo ci) {
         if (this instanceof IPVPEntity newPVP && oldPlayer instanceof IPVPEntity oldPVP) {
-            newPVP.PVPToggles$setPVPEnabled(oldPVP.PVPToggles$isPVPEnabled());
+            newPVP.PVPToggles$setPVPEnabled(oldPVP.PVPToggles$isPVPEnabled(), false);
             newPVP.PVPToggles$setDisablePVPAfterDelay(oldPVP.PVPToggles$isDisablePVPAfterDelay());
             newPVP.PVPToggles$setPVPDelayTimer(oldPVP.PVPToggles$getPvpDelayTimer());
             newPVP.PVPToggles$setHasClientMod(oldPVP.PVPToggles$hasClientMod());
