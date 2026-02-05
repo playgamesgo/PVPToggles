@@ -45,6 +45,18 @@ public final class Config {
     @SerialEntry
     private boolean combatManagerKillOnLogout = true;
 
+    @SerialEntry
+    private float combatManagerMinDamageToTrigger = 1.0f;
+
+    @SerialEntry
+    private boolean combatManagerAccumulateDamageTrigger = true;
+
+    @SerialEntry
+    private float combatManagerAccumulateDamageThreshold = 4.0f;
+
+    @SerialEntry
+    private int combatManagerDamageAccumulationTimeframeSeconds = 10;
+
 
     @SerialEntry
     private String pvpDisabledSelfMessage = "<red><bold>You cannot attack players while your PVP is disabled!</bold></red>";

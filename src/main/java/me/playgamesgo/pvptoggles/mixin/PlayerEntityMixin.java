@@ -11,8 +11,11 @@ import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Pair;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,6 +24,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
+
+import java.util.*;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements IPVPEntity {
@@ -34,6 +39,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements IPVPEnti
     @Unique private int PVPToggles$CombatTimer = 0;
     @Unique private BossBar PVPToggles$lastBossBar = null;
     @Unique private boolean PVPToggles$hasClientMod = false;
+
+    @Unique private final Map<UUID, Pair<Long, Float>> PVPToggles$accumulatedDamageSources = new HashMap<>(); // UUID -> (timestamp, accumulated damage)
 
     @Inject(method = "shouldDamagePlayer", at = @At("HEAD"), cancellable = true)
     private void checkPVPMode(PlayerEntity attacker, CallbackInfoReturnable<Boolean> cir) {
@@ -55,12 +62,48 @@ public abstract class PlayerEntityMixin extends LivingEntity implements IPVPEnti
             if (attackerPVP instanceof Audience audience) {
                 audience.sendActionBar(MiniMessage.miniMessage().deserialize(config.getPvpDisabledOtherMessage()));
             }
-            return;
         }
+    }
 
-        if (config.isEnableCombatManager()) {
-            PVPToggles$startCombat();
-            attackerPVP.PVPToggles$startCombat();
+    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/PlayerLikeEntity;damage(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/damage/DamageSource;F)Z"))
+    private void onDamageTaken(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        me.playgamesgo.pvptoggles.utils.Config config = me.playgamesgo.pvptoggles.utils.Config.HANDLER.instance();
+
+        if (source.getAttacker() instanceof PlayerEntity attacker) {
+            IPVPEntity attackerPVP = (IPVPEntity) attacker;
+
+            if (config.isEnableCombatManager()) {
+                if (!config.isCombatManagerAccumulateDamageTrigger()) {
+                    if (config.getCombatManagerMinDamageToTrigger() <= amount) {
+                        PVPToggles$startCombat();
+                        attackerPVP.PVPToggles$startCombat();
+                    }
+                } else {
+                    UUID attackerUUID = attacker.getUuid();
+                    long currentTime = System.currentTimeMillis();
+
+                    Map<UUID, Pair<Long, Float>> accumulatedDamageSourcesCopy = new HashMap<>(PVPToggles$accumulatedDamageSources);
+                    for (Map.Entry<UUID, Pair<Long, Float>> entry : accumulatedDamageSourcesCopy.entrySet()) {
+                        if (currentTime - entry.getValue().getLeft() > config.getCombatManagerDamageAccumulationTimeframeSeconds() * 1000L) {
+                            PVPToggles$accumulatedDamageSources.remove(entry.getKey());
+                        }
+                    }
+
+                    float totalAccumulatedDamage = amount;
+                    if (PVPToggles$accumulatedDamageSources.containsKey(attackerUUID)) {
+                        Pair<Long, Float> existingSource = PVPToggles$accumulatedDamageSources.get(attackerUUID);
+                        totalAccumulatedDamage += existingSource.getRight();
+                    }
+
+                    PVPToggles$accumulatedDamageSources.put(attackerUUID, new Pair<>(currentTime, totalAccumulatedDamage));
+
+                    if (totalAccumulatedDamage >= config.getCombatManagerAccumulateDamageThreshold()) {
+                        PVPToggles$startCombat();
+                        attackerPVP.PVPToggles$startCombat();
+                        PVPToggles$accumulatedDamageSources.remove(attackerUUID);
+                    }
+                }
+            }
         }
     }
 
