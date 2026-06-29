@@ -4,24 +4,25 @@ import me.playgamesgo.pvptoggles.client.PVPTogglesClient;
 import me.playgamesgo.pvptoggles.utils.PVPTogglesConstants;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import org.jspecify.annotations.NonNull;
 
-public record CombatPacket(boolean start) implements CustomPayload, ICustomPacket<CombatPacket> {
-    public static final CustomPayload.Id<CombatPacket> ID = new CustomPayload.Id<>(PVPTogglesConstants.COMBAT_PACKET_ID);
-    public static final PacketCodec<RegistryByteBuf, CombatPacket> CODEC = PacketCodec.of(CombatPacket::write, CombatPacket::new);
+public record CombatPacket(boolean start) implements CustomPacketPayload, ICustomPacket<CombatPacket> {
+    public static final CustomPacketPayload.Type<CombatPacket> ID = new CustomPacketPayload.Type<>(PVPTogglesConstants.COMBAT_PACKET_ID);
+    public static final StreamCodec<RegistryFriendlyByteBuf, CombatPacket> CODEC = StreamCodec.ofMember(CombatPacket::write, CombatPacket::new);
 
-    private CombatPacket(RegistryByteBuf buf) {
+    private CombatPacket(RegistryFriendlyByteBuf buf) {
         this(buf.readBoolean());
     }
 
-    private void write(RegistryByteBuf buf) {
+    private void write(RegistryFriendlyByteBuf buf) {
         buf.writeBoolean(start);
     }
 
     @Override
-    public Id<? extends CustomPayload> getId() {
+    public @NonNull Type<? extends CustomPacketPayload> type() {
         return ID;
     }
 

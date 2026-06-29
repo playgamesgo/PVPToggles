@@ -5,24 +5,25 @@ import me.playgamesgo.pvptoggles.mixinaccess.IPVPEntity;
 import me.playgamesgo.pvptoggles.utils.PVPTogglesConstants;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import org.jspecify.annotations.NonNull;
 
-public record PVPHandshakePacket(boolean pvpEnabled) implements CustomPayload, ICustomPacket<PVPHandshakePacket> {
-    public static final CustomPayload.Id<PVPHandshakePacket> ID = new CustomPayload.Id<>(PVPTogglesConstants.HANDSHAKE_PACKET_ID);
-    public static final PacketCodec<RegistryByteBuf, PVPHandshakePacket> CODEC = PacketCodec.of(PVPHandshakePacket::write, PVPHandshakePacket::new);
+public record PVPHandshakePacket(boolean pvpEnabled) implements CustomPacketPayload, ICustomPacket<PVPHandshakePacket> {
+    public static final CustomPacketPayload.Type<PVPHandshakePacket> ID = new CustomPacketPayload.Type<>(PVPTogglesConstants.HANDSHAKE_PACKET_ID);
+    public static final StreamCodec<RegistryFriendlyByteBuf, PVPHandshakePacket> CODEC = StreamCodec.ofMember(PVPHandshakePacket::write, PVPHandshakePacket::new);
 
     @Override
-    public CustomPayload.Id<PVPHandshakePacket> getId() {
+    public CustomPacketPayload.@NonNull Type<PVPHandshakePacket> type() {
         return ID;
     }
 
-    private PVPHandshakePacket(RegistryByteBuf buf) {
+    private PVPHandshakePacket(RegistryFriendlyByteBuf buf) {
         this(buf.readBoolean());
     }
 
-    private void write(RegistryByteBuf buf) {
+    private void write(RegistryFriendlyByteBuf buf) {
         buf.writeBoolean(pvpEnabled);
     }
 

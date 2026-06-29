@@ -7,12 +7,12 @@ import dev.rollczi.litecommands.annotations.optional.OptionalArg;
 import me.playgamesgo.pvptoggles.mixinaccess.IPVPEntity;
 import me.playgamesgo.pvptoggles.utils.Config;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 
 @Command(name = "pvp", aliases = "pvptoggle")
 public final class PVPToggleCommand {
     @Execute
-    public void execute(@Context ServerPlayerEntity context, @OptionalArg Boolean enable) {
+    public void execute(@Context ServerPlayer context, @OptionalArg Boolean enable) {
         if (enable == null) {
             IPVPEntity pvp = (IPVPEntity) context;
             enable = !pvp.PVPToggles$isPVPEnabled();
@@ -21,7 +21,7 @@ public final class PVPToggleCommand {
         setPVP(context, enable);
     }
 
-    private void setPVP(ServerPlayerEntity player, boolean enable) {
+    private void setPVP(ServerPlayer player, boolean enable) {
         Config config = Config.HANDLER.instance();
         IPVPEntity pvp = (IPVPEntity) player;
 

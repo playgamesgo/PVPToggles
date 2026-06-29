@@ -8,12 +8,12 @@ import lombok.Setter;
 import me.playgamesgo.pvptoggles.PVPToggles;
 import net.fabricmc.loader.api.FabricLoader;
 import net.kyori.adventure.bossbar.BossBar;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 
 @Getter @Setter
 public final class Config {
     public static ConfigClassHandler<Config> HANDLER = ConfigClassHandler.createBuilder(Config.class)
-            .id(Identifier.of(PVPToggles.MOD_ID, "pvptoggles-server"))
+            .id(Identifier.fromNamespaceAndPath(PVPToggles.MOD_ID, "pvptoggles-server"))
                     .serializer(config -> GsonConfigSerializerBuilder.create(config)
                             .setPath(FabricLoader.getInstance().getConfigDir().resolve("pvptoggles-server.json5"))
                             .setJson5(true)

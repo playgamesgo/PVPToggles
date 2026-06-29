@@ -17,8 +17,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.kyori.adventure.platform.modcommon.MinecraftServerAudiences;
 import net.kyori.adventure.text.Component;
-import net.minecraft.command.DefaultPermissions;
-import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.commands.CommandSourceStack;
 
 public final class PVPToggles implements DedicatedServerModInitializer {
     public static final String MOD_ID = "pvptoggles";
@@ -38,8 +37,8 @@ public final class PVPToggles implements DedicatedServerModInitializer {
         LiteFabricFactory.server()
                 .permissionResolver(new PermissionDefaultResolver((sender, permission) -> {
                     if (sender instanceof FabricServerSender serverSender) {
-                        ServerCommandSource player = (ServerCommandSource) serverSender.getHandle();
-                        if (player.getPermissions().hasPermission(DefaultPermissions.OWNERS)) return true;
+                        CommandSourceStack player = (CommandSourceStack) serverSender.getHandle();
+                        if (player.permissions().hasPermission(net.minecraft.server.permissions.Permissions.COMMANDS_OWNER)) return true;
 
                         return Permissions.check(player, permission);
                     }

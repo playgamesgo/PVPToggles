@@ -3,8 +3,8 @@ package me.playgamesgo.pvptoggles.mixin;
 import com.llamalad7.mixinextras.sugar.Local;
 import me.playgamesgo.pvptoggles.mixinaccess.IPVPEntity;
 import me.playgamesgo.pvptoggles.utils.Config;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.MutableText;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.MutableComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,7 +16,7 @@ import xyz.eclipseisoffline.eclipsescustomname.PlayerNameManager;
 @Mixin(value = PlayerNameManager.class, remap = false)
 public class PlayerNameManagerMixin {
     @Inject(method = "updateFullPlayerName", at = @At(value = "INVOKE", target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"))
-    private void includePVPStatus(ServerPlayerEntity player, CallbackInfo ci, @Local MutableText name) {
+    private void includePVPStatus(ServerPlayer player, CallbackInfo ci, @Local(name = "name") MutableComponent name) {
         Config config = Config.HANDLER.instance();
         if (!config.isAddCompatFabricCustomNames()) return;
 

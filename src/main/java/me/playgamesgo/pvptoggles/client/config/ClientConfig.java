@@ -7,13 +7,13 @@ import lombok.Getter;
 import lombok.Setter;
 import me.playgamesgo.pvptoggles.PVPToggles;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 
 @Getter
 @Setter
 public final class ClientConfig {
     public static ConfigClassHandler<ClientConfig> HANDLER = ConfigClassHandler.createBuilder(ClientConfig.class)
-            .id(Identifier.of(PVPToggles.MOD_ID, "pvptoggles-client"))
+            .id(Identifier.fromNamespaceAndPath(PVPToggles.MOD_ID, "pvptoggles-client"))
             .serializer(config -> GsonConfigSerializerBuilder.create(config)
                     .setPath(FabricLoader.getInstance().getConfigDir().resolve("pvptoggles-client.json5"))
                     .setJson5(true)

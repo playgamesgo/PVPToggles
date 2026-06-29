@@ -1,23 +1,23 @@
 package me.playgamesgo.pvptoggles.mixin;
 
 import me.playgamesgo.pvptoggles.mixinaccess.IPVPEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(ServerPlayerEntity.class)
-public class ServerPlayerEntityMixin {
-    @Inject(method = "onDeath", at = @At("HEAD"))
+@Mixin(ServerPlayer.class)
+public class ServerPlayerMixin {
+    @Inject(method = "die", at = @At("HEAD"))
     private void onDeathClearTimers(CallbackInfo ci) {
         if (this instanceof IPVPEntity pvp) {
             pvp.PVPToggles$resetCombatTimer();
         }
     }
 
-    @Inject(method = "copyFrom", at = @At("TAIL"))
-    private void copyFrom(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfo ci) {
+    @Inject(method = "restoreFrom", at = @At("TAIL"))
+    private void copyFrom(ServerPlayer oldPlayer, boolean restoreAll, CallbackInfo ci) {
         if (this instanceof IPVPEntity newPVP && oldPlayer instanceof IPVPEntity oldPVP) {
             newPVP.PVPToggles$setPVPEnabled(oldPVP.PVPToggles$isPVPEnabled(), false);
             newPVP.PVPToggles$setDisablePVPAfterDelay(oldPVP.PVPToggles$isDisablePVPAfterDelay());

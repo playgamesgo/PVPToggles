@@ -1,9 +1,9 @@
 package me.playgamesgo.pvptoggles.client.utils;
 
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
+import net.minecraft.client.KeyMapping;
+import com.mojang.blaze3d.platform.InputConstants;
 
-public final class KeybindWrapper extends KeyBinding {
+public final class KeybindWrapper extends KeyMapping {
     private boolean wasPressed;
 
     public KeybindWrapper(String translationKey, int code, Category category) {
@@ -11,17 +11,17 @@ public final class KeybindWrapper extends KeyBinding {
         wasPressed = false;
     }
 
-    public KeybindWrapper(String translationKey, InputUtil.Type type, int code, Category category) {
+    public KeybindWrapper(String translationKey, InputConstants.Type type, int code, Category category) {
         super(translationKey, type, code, category);
         this.wasPressed = false;
     }
 
     public boolean isReleased() {
-        if (!this.isPressed() && wasPressed) {
+        if (!this.isDown() && wasPressed) {
             wasPressed = false;
             return true;
         }
-        if (this.isPressed()) {
+        if (this.isDown()) {
             wasPressed = true;
         }
         return false;

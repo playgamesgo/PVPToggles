@@ -5,19 +5,19 @@ import me.playgamesgo.pvptoggles.client.config.ClientConfig;
 import me.playgamesgo.pvptoggles.utils.PVPTogglesConstants;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
-import net.minecraft.client.gl.RenderPipelines;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.render.RenderTickCounter;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.Hud;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.DeltaTracker;
 
 public final class HudRenderer {
     public static void init() {
         HudElementRegistry.attachElementBefore(VanillaHudElements.MISC_OVERLAYS, PVPTogglesConstants.PVP_INDICATOR_ID, HudRenderer::renderIndicator);
     }
 
-    private static void renderIndicator(DrawContext context, RenderTickCounter tickCounter) {
+    private static void renderIndicator(GuiGraphicsExtractor context, DeltaTracker tickCounter) {
         if (!ClientConfig.HANDLER.instance().isDisplayPVPIcon()) return;
         if (!PVPTogglesClient.isPVPEnabled) return;
-        context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, InGameHud.HOTBAR_ATTACK_INDICATOR_PROGRESS_TEXTURE, 0, context.getScaledWindowHeight() - 18, 18, 18);
+        context.blitSprite(RenderPipelines.GUI_TEXTURED, Hud.HOTBAR_ATTACK_INDICATOR_PROGRESS_SPRITE, 0, context.guiHeight() - 18, 18, 18);
     }
 }

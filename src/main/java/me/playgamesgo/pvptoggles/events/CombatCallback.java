@@ -2,7 +2,7 @@ package me.playgamesgo.pvptoggles.events;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 
 public interface CombatCallback {
     Event<CombatCallback> EVENT = EventFactory.createArrayBacked(CombatCallback.class,
@@ -13,5 +13,5 @@ public interface CombatCallback {
             }
     );
 
-    void onCombatChange(PlayerEntity player, boolean inCombat);
+    void onCombatChange(Player player, boolean inCombat);
 }
