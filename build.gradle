@@ -32,8 +32,8 @@ repositories {
         url 'https://maven.wispforest.io/releases/'
     }
     maven {
-        url "https://repo.panda-lang.org/releases"
-        name "Panda"
+        url "https://repo.eternalcode.pl/snapshots"
+        name "eternalcode"
     }
     maven {
         name "sonatype-oss-snapshots1"
